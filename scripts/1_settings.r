@@ -1,5 +1,4 @@
 #remove all objects
-version
 rm(list=ls())
 args <- commandArgs(TRUE)
 

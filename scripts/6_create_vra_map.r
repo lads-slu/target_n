@@ -1,4 +1,3 @@
-print('6.1 Compute nreq')
 if(strategy!='usermean'){
   #compute mean remaining N requirement
   ##temporary fix
@@ -16,8 +15,7 @@ if(strategy!='usermean'){
   nreq<-ndre75
   values(nreq)[!is.na(values(nreq))]<-n.median
 }
-  print('6.2 Compute vra')
-  
+
 #prepare raster for fertilization earlier in the season
 nfert<-ndre75
 values(nfert)[!is.na(values(nfert))]<-as.numeric(nfertbefore)
@@ -38,7 +36,6 @@ if(strategy!='usermean'){
   }
 vra[vra<=0]<-0
 
-print('6.3 Filter map')
 if(mean.filter & strategy=='useryieldmap'){
   vra<-crop(vra, aoi); vra<-mask(vra, aoi_small)
   vra<-extend(x=vra, y=aoi_big, fill=NA)
@@ -52,7 +49,6 @@ plt(y=aoi, x=nreqr, main='nreqr', plot.results=plot.results)
 plt(y=aoi, x=vra, main='nrate', plot.results=plot.results)
 
 
-print('6.4 Adjust mean, min and max')
 if(rerun){
   ##adjust level so that nrate median is equal to n.median
   vra<-vra + n.median-median(values(vra), na.rm=T) 
@@ -70,10 +66,10 @@ if(rerun){
   }
   plt(y=aoi, x=vra, main='nrate -min and max adjusted', plot.results=plot.results)
 }
+
 #set any negative nrates to 0
 values(vra)[values(vra)<0]<-0
 
-print('6.5 Aggregate raster')
 #aggregate raster if res>10
 if(res>10)vra<-aggregate(x=vra, fact=res/10)
 vra<-crop(vra, aoi)
@@ -81,7 +77,6 @@ vra<-mask(vra, aoi)
 plt(y=aoi, x=vra, main='nrate -aggregated', plot.results=plot.results)
 if(res==10&plot.results)plot(values(ndre75), values(vra))
 
-print('6.6 Trim distribution')
 a<-values(vra)
 high<-quantile(a, 0.975, na.rm=T, names=F)
 low<-quantile(a, 0.025, na.rm=T, names=F)
@@ -91,11 +86,9 @@ values(vra)<-a
 plt(y=aoi, x=vra, main='nrate -trimmed', plot.results=plot.results)
 if(res==10&plot.results)plot(values(ndre75), values(vra))
 
-print('6.7 Compute statistics')
 n.min<-min(values(vra), na.rm=T)
 n.median<-median(values(vra), na.rm=T)
 n.max<-max(values(vra), na.rm=T)
 
 #give feedback
-print('Computations are ready')
-
+print('nrate map has been calculated')

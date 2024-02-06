@@ -1,7 +1,6 @@
-#override setting
-mean.filter<-1
+#additional setting
+mean.filter<-TRUE
 
-print('5.1 Mask')
 #mask index raster by 15 m
 aoi_small<-buffer(aoi, -15)
 aoi_big<-buffer(aoi, 25)
@@ -18,7 +17,6 @@ if(strategy=='useryieldmap'){
 plt(y=aoi, x=yield, main='yield -cropped', plot.results=plot.results)
 }
 
-print('5.2 Filter')
 if(mean.filter) {
   w<-matrix(data=1,nrow=3, ncol=3)
   ndre75<-focal(ndre75, w=w, na.rm=T, pad=T, fun=mean)
@@ -31,7 +29,6 @@ if(mean.filter) {
   }
   }
 
-print('5.3 Disaggregate')
 #bilinear resampling to 10 m 
 ndre75<-disagg(x=ndre75, fact=2, method='bilinear')
 ndre75<-crop(ndre75, aoi); ndre75<-mask(ndre75, aoi)
@@ -55,10 +52,7 @@ if(strategy!='usermean'){
   df<-data.frame(ymax=values(yield))
   names(df)<-"ymax"
   df$nuptakemin<-as.numeric(nuptakemin)
-  #df$nuptakemax<-as.numeric(nuptakemax)
-  #df$cv<-factor(df$cv, levels=c('Informer', 'Etana', 'Julius', 'RGT Reform', 'Hallfreda' ))
-  #df$region<-factor(df$region)
 }
 
-print('Data preparation is ready')
-
+#give feedback
+print('Data have been prepared')

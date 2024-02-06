@@ -6,3 +6,6 @@ plt<-function(x, y, main, plot.results){
     plot(y, main=main, add=T)
   }
 }
+
+#give feedback
+print('Functions have been defined')
